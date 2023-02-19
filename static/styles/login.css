@@ -1,0 +1,113 @@
+#loginBox {
+    width: 55vmin;
+    margin: auto;
+    margin-top: 10vmin;
+    border: 1px solid #D8DEE2;
+    background-color: #FFFFFF;
+    border-radius: 1vmin;
+    padding: 5vmin;
+}
+
+#loginBox h1 {
+    font-size: 5vmin;
+    text-align: center;
+}
+
+#loginBox label {
+    display: block;
+    margin-top: 3vmin;
+    font-weight: bold;
+    font-size: 2vmin;
+    color: #24292E;
+}
+
+#loginBox input {
+    margin-top: 1vmin;
+    width: 52vmin;
+    height: 5vmin;
+    padding-left: 1.5vmin;
+    padding-right: 1.5vmin;
+    outline: none;
+    border: 1px solid #D1D5DA;
+    background-color: white;
+    border-radius: 0.5vmin;
+    font-size: 2vmin;
+    color: #24292E;
+    box-shadow: 0px 1px 2px 0px rgba(27, 31, 35, 0.075) inset;
+    transition: 0.1s;
+    transition-property: box-shadow, border-color;
+}
+
+#loginBox button[type='submit'] {
+    margin-top: 4vmin;
+    width: 55.5vmin;
+    height: 6vmin;
+    outline: none;
+    border: 1px solid #4481eb;
+    background-image: linear-gradient(to top, #4481eb 0%, #00aae8 100%);
+    font-weight: bold;
+    border-radius: 0.5vmin;
+    font-size: 2vmin;
+    color: white;
+}
+
+#loginBox input:focus {
+    border-color: #2188ff;
+    box-shadow: 0 0 0 0.5vmin #b2d1f3;
+    transition: 0.1s;
+}
+
+#loginBox button[type='submit']:hover {
+    border-color: #0054e8;
+}
+
+#loginBox button[type='submit']:active {
+    background-image: linear-gradient(to top, #0f4cf5 0%, #008abd 100%);
+}
+
+#signUpBox {
+    width: 55vmin;
+    margin: auto;
+    margin-top: 5vmin;
+    border: 1px solid #D8DEE2;
+    background-color: #FFFFFF;
+    border-radius: 1vmin;
+    padding: 5vmin;
+}
+
+#signUpBox p {
+    margin-top: 0;
+    font-size: 2vmin;
+}
+
+#signUpBox a {
+    color: #0366d6;
+    text-decoration: none;
+    font-size: 2vmin;
+}
+
+#signUpBox a:hover {
+    text-decoration: underline;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translate(calc(-100% - 6vmin),0);
+        opacity: 0;
+    }
+    to {
+        transform: translate(0,-0);
+        opacity: 1;
+    }
+}
+
+#error {
+    position: absolute;
+    top: 6vmin;
+    margin-left: 6vmin;
+    border: 1px solid #D8DEE2;
+    background-color: #FFFFFF;
+    border-radius: 1vmin;
+    padding: 3vmin;
+    animation: slideIn 0.5s ease-out;
+}

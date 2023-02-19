@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Sign Up</title>
+    <link href="static/styles/global.css" rel="stylesheet" type="text/css" />
+    <link href="static/styles/signup.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div id='signUpBox'>
+        <h1>Sign Up</h1>
+        <form autocomplete="off" method="POST">
+            <label>Username</label> <input type='text' name='username' autocomplete="false" value={{request.form.username}}>
+            <label>Password</label> <input type='password' name='password' autocomplete="false" value={{request.form.password}}>
+            <label>Re-Type Password</label> <input type='password' name='retypepassword' autocomplete="false" value={{request.form.retypepassword}}>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div id='logInBox'>
+        <p>Already have an account?</p><a href='/login'>Log In</a>
+    </div>
+    {% with errors = get_flashed_messages() %}
+        {% if errors %}
+            <div id='errors'>
+                {% for error in errors[0] %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith%}
+</body>
+
+</html>

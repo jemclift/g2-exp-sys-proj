@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Login</title>
+    <link href="static/styles/global.css" rel="stylesheet" type="text/css" />
+    <link href="static/styles/login.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div id='loginBox'>
+        <h1>Log In</h1>
+        <form autocomplete="off" method="POST">
+            <label>Username</label> <input type='text' name='username' autocomplete="false" value={{request.form.username}}>
+            <label>Password</label> <input type='password' name='password' autocomplete="false" value={{request.form.password}}>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div id='signUpBox'>
+        <p>Don't have an account?</p><a href='/signup'>Sign Up</a>
+    </div>
+    {% if error %}
+    <div id='error'>{{ error }}</div>
+    {% endif %}
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+:root {
+    --primary-blue: #2e3b84;
+    --primary-green: #486b3a;
+}
+
+body {
+    font-family: Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F9F9F9;
+}
