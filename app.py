@@ -12,6 +12,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
+#Uncomment below to create database
+
+#with app.app_context():
+#    db.create_all()
+
 # routes
 
 from views import core
