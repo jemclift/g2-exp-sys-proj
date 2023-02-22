@@ -1,0 +1,6 @@
+# run this command to install all requirements
+# pip install -r requirements.txt
+
+flask
+flask_sqlalchemy
+passlib
