@@ -13,6 +13,17 @@ class User(db.Model):
     PwdHash = db.Column(db.String(77))
     AuthToken = db.Column(db.String(64))
 
+class post(db.Model):
+
+    __tablename__ = 'Post'
+
+    postID = db.Column(db.Integer, primary_key=True)
+    posterUserName = db.Column(db.String(20))
+    imageLink = db.Column(db.String)
+    caption = db.Column(db.String)
+    verified = db.Column(db.Bool)
+
+
 # insert a user with the given name and password hash. 
 
 def insertUser(UserName, PwdHash):
