@@ -21,7 +21,7 @@ class post(db.Model):
     posterUserName = db.Column(db.String(20))
     imageLink = db.Column(db.String)
     caption = db.Column(db.String)
-    verified = db.Column(db.Bool)
+    verified = db.Column(db.Boolean)
 
 
 # insert a user with the given name and password hash. 
