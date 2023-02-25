@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -13,16 +15,56 @@ class User(db.Model):
     PwdHash = db.Column(db.String(77))
     AuthToken = db.Column(db.String(64))
 
-class post(db.Model):
+class Post(db.Model):
 
     __tablename__ = 'Post'
 
-    postID = db.Column(db.Integer, primary_key=True)
-    posterUserName = db.Column(db.String(20))
-    imageLink = db.Column(db.String)
-    caption = db.Column(db.String)
-    verified = db.Column(db.Bool)
+    PostID = db.Column(db.Integer, primary_key=True)
+    UserID = db.Column(db.Integer)
+    Caption = db.Column(db.String)
+    Verified = db.Column(db.Boolean)
+    Points = db.Column(db.Integer)
 
+    # UTC datetime
+    Date = db.Column(db.DateTime)
+
+    # links to the image on the server and the json database
+    ImageLink = db.Column(db.String)
+    PointsLink = db.Column(db.String)
+
+# create post
+
+def addPost(userid, caption, imagelink=""):
+
+    new_post = Post(
+        UserID=userid, 
+        Caption=caption,
+        Verified=False,
+        Points=0,
+        Date=datetime.now(),
+        ImageLink="" if imagelink == "" else imagelink,
+        PointsLink=""
+    )
+
+    db.session.add(new_post)
+    db.session.commit()
+
+# delete post
+
+def deletePost(postid):
+
+    post = Post.query.filter_by(PostID=postid).first()
+
+    if post is not None:
+        post.delete()
+        db.session.commit()
+
+# get n most recent posts
+
+def getMostRecentPosts(n=10):
+
+    posts = Post.query.order_by(desc(Post.Date)).limit(n).all()
+    return posts
 
 # insert a user with the given name and password hash. 
 

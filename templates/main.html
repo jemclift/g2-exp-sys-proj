@@ -15,11 +15,36 @@
     <link rel="icon" type="image/png" sizes="32x32" href="static/assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="static/assets/favicon-16x16.png">
     <link rel="manifest" href="static/assets/site.webmanifest">
+
+    <!-- scripts -->
+    <script src="static/scripts/main.js" async></script>
 </head>
 
 <body>
-  <p>LOGGED IN {{ user.UserName }}</p>
-  <a href="/logout">LOGOUT</a>
+    <p>Logged in as {{ user.UserName }}</p><a href="/logout">LOGOUT</a>
+
+    <div id='postBox'>
+        <h1>new byte</h1>
+        <input type="file" onchange="previewFile(this)" accept="image/png, image/jpeg">
+        <form autocomplete="off" method="POST">
+            <input type='text' name='caption' placeholder="your sustainability tip..." value={{request.form.caption}}>
+            <input hidden id="img-base64-txt" type="text" name="image" value={{request.form.image}}>
+            <button type="submit">post</button>
+        </form>
+    </div>
+
+    {% if posts %}
+        {% for post in posts %}
+            <div class='post-card'>
+                <h1>user{{ post.UserID }}</h1>
+                <img src="{{ post.ImageLink }}">
+                <p>{{ post.Caption }}</p>
+                <p>posted {{ post.Date }}</p>
+                <p>sustainability score {{ post.Points }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
 </body>
 
 </html>

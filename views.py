@@ -42,16 +42,25 @@ def login():
         else:
             return render_template('login.html')
 
-@core.route('/main')
+@core.route('/main', methods=['GET','POST'])
 
 def main():
     # user isn't authorised
     if not checkForCookie(request, db, User):
         return redirect(url_for('core.login'))
 
-    # send the user data with the response
     user = getUserFromCookie(request, db, User)
-    return render_template('main.html', user=user)
+    
+    # new user post POST
+    if request.method == "POST":
+        caption, image = request.form['caption'], request.form['image']
+        addPost(user.UserID, caption, image)
+
+    # get recent posts to display
+    posts = getMostRecentPosts()
+
+    # send the user data with the response
+    return render_template('main.html', user=user, posts=posts)
 
 @core.route('/logout')
 
