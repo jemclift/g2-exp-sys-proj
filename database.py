@@ -19,11 +19,11 @@ class Post(db.Model):
 
     __tablename__ = 'Post'
 
-    PostID = db.Column(db.Integer, primary_key=True)
-    UserID = db.Column(db.Integer)
-    Caption = db.Column(db.String)
-    Verified = db.Column(db.Boolean)
-    Points = db.Column(db.Integer)
+    postID = db.Column(db.Integer, primary_key=True)
+    posterUserName = db.Column(db.String(20))
+    imageLink = db.Column(db.String)
+    caption = db.Column(db.String)
+    verified = db.Column(db.Boolean)
 
     # UTC datetime
     Date = db.Column(db.DateTime)
