@@ -1,0 +1,23 @@
+body {
+    background-color: #93C572;
+}
+
+#title {
+    text-align: center;
+}
+
+#title h1 {
+    color: #228B22
+}
+
+#main-text {
+    text-align: center;
+}
+
+#main-text p {
+    color: #228B22;
+}
+
+#logo {
+    text-align: center;
+}
