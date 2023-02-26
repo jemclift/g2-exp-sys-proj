@@ -111,6 +111,10 @@ def signup():
             form["retypepassword"] == ""):
             errors.append("All fields are required")
 
+        # check username is short enough
+        if len(form['username']) > 20:
+            errors.append("Max username length is 20 characters")
+
         # check password is long enough
         if len(form['password']) < 8:
             errors.append("Password is too short")
