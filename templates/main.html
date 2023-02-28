@@ -4,11 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>Main</title>
+    <title>EcoByte</title>
 
     <!-- style sheets -->
     <link href="static/styles/global.css" rel="stylesheet" type="text/css" />
-    <link href="static/styles/login.css" rel="stylesheet" type="text/css" />
+    <link href="static/styles/main.css" rel="stylesheet" type="text/css" />
 
     <!-- favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="static/assets/apple-touch-icon.png">
@@ -20,29 +20,80 @@
     <script src="static/scripts/main.js" async></script>
 </head>
 
-<body>
+<body onload="formatAllDates()">
     <p>Logged in as {{ user.UserName }}</p><a href="/logout">LOGOUT</a>
+    <p>my sustainability score <b>{{ user.Score }}</b></p>
 
+    <!-- new post form -->
     <div id='postBox'>
-        <h1>new byte</h1>
-        <input type="file" onchange="previewFile(this)" accept="image/png, image/jpeg">
+        <h1>new byte 🐊</h1>
+        <input type="file" onchange="fillBase64(this)" accept="image/png, image/jpeg">
         <form autocomplete="off" method="POST">
-            <input type='text' name='caption' placeholder="your sustainability tip..." value={{request.form.caption}}>
-            <input hidden id="img-base64-txt" type="text" name="image" value={{request.form.image}}>
+            <input type='text' name='caption' placeholder="your sustainability tip...">
+            <input hidden id="img-base64-txt" type="text" name="image">
+            <input hidden type="text" name="engagement" value="POST">
             <button type="submit">post</button>
         </form>
     </div>
 
+    <!-- posts -->
     {% if posts %}
-        {% for post in posts %}
-            <div class='post-card'>
-                <h1>user{{ post.UserID }}</h1>
-                <img src="{{ post.ImageLink }}">
-                <p>{{ post.Caption }}</p>
-                <p>posted {{ post.Date }}</p>
-                <p>sustainability score {{ post.Points }}</p>
+    {% for post in posts %}
+    <div class='post-card'>
+
+        <!-- main post -->
+        <h1>{{ post.UserName }} ({{ userpoints[loop.index0] }} points)</h1>
+        {% if post.ImageLink != "" %}
+        <img src="{{ post.ImageLink }}">
+        {% endif %}
+        <p>{{ post.Caption }}</p>
+        <p class='post-date'>{{ post.Date }}</p>
+        <p>sustainability score {{ post.Points }}</p>
+
+        <!-- comments on this post -->
+        <div id="comments">
+            {% for comment in comments[loop.index0] %}
+            <div class="comment">
+                <b>{{ comment[1] }}</b>
+                <p>{{ comment[2] }}</p>
             </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+
+        <!-- like button -->
+        <form autocomplete="off" method="POST">
+            <input hidden type="text" name="postid" value="{{ post.PostID }}">
+            <input hidden type="text" name="engagement" value="LIKE">
+
+            {% if likestatuss[loop.index0] == 1 %}
+            <button class="like-dislike-active" type="submit">Like</button>
+            {% else %}
+            <button class="like-dislike-unactive" type="submit">Like</button>
+            {% endif %}
+        </form>
+
+        <!-- dislike button -->
+        <form autocomplete="off" method="POST">
+            <input hidden type="text" name="postid" value="{{ post.PostID }}">
+            <input hidden type="text" name="engagement" value="DISLIKE">
+
+            {% if likestatuss[loop.index0] == -1 %}
+            <button class="like-dislike-active" type="submit">Dislike</button>
+            {% else %}
+            <button class="like-dislike-unactive" type="submit">Dislike</button>
+            {% endif %}
+        </form>
+
+        <!-- comment form -->
+        <form autocomplete="off" method="POST">
+            <input type="text" name="comment">
+            <input hidden type="text" name="postid" value="{{ post.PostID }}">
+            <input hidden type="text" name="engagement" value="COMMENT">
+            <button type="submit">Comment</button>
+        </form>
+
+    </div>
+    {% endfor %}
     {% endif %}
 
 </body>

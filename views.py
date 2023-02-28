@@ -56,16 +56,40 @@ def main():
 
     user = getUserFromCookie(request, db, User)
     
-    # new user post POST
+    # new post, like, dislike or comment
     if request.method == "POST":
-        caption, image = request.form['caption'], request.form['image']
-        addPost(user.UserID, caption, image)
+
+        if request.form["engagement"] == 'LIKE':
+            postid = request.form['postid']
+            toggleLikePost(user.UserID, postid)
+
+        elif request.form["engagement"] == 'DISLIKE':
+            postid = request.form['postid']
+            toggleDislikePost(user.UserID, postid)
+
+        elif request.form["engagement"] == 'COMMENT':
+            postid, comment = request.form['postid'], request.form['comment']
+            addComment(user.UserID, user.UserName, postid, comment)
+
+        elif request.form["engagement"] == 'POST':
+            caption, image = request.form['caption'], request.form['image']
+            addPost(user.UserID, user.UserName, caption, image)
 
     # get recent posts to display
     posts = getMostRecentPosts()
+    comments = getCommentListFromPosts(posts)
+    likestatuss = getLikeStatussFromPosts(posts, user.UserID)
+    userpoints = getUserPointsFromPosts(posts)
 
     # send the user data with the response
-    return render_template('main.html', user=user, posts=posts)
+    return render_template(
+        'main.html', 
+        user=user, 
+        posts=posts, 
+        comments=comments,
+        likestatuss=likestatuss,
+        userpoints=userpoints
+    )
 
 @core.route('/logout')
 
