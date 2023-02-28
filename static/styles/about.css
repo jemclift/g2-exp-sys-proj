@@ -2,22 +2,17 @@ body {
     background-color: #93C572;
 }
 
-#title {
+#title, #main-text, #logo {
     text-align: center;
 }
 
 #title h1 {
-    color: #228B22
-}
-
-#main-text {
-    text-align: center;
+    color: #228B22;
+    font-size: 64px;
+    font-family: Ariel;
 }
 
 #main-text p {
     color: #228B22;
-}
-
-#logo {
-    text-align: center;
+    font-family: Ariel;
 }
