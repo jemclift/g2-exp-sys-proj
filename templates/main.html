@@ -20,81 +20,108 @@
     <script src="static/scripts/main.js" async></script>
 </head>
 
-<body onload="formatAllDates()">
-    <p>Logged in as {{ user.UserName }}</p><a href="/logout">LOGOUT</a>
-    <p>my sustainability score <b>{{ user.Score }}</b></p>
+<body onload="formatAllDates(); mobileCheck()">
+    <input hidden type="number" id="lets-go-mobile" value="0">
 
-    <!-- new post form -->
-    <div id='postBox'>
-        <h1>new byte 🐊</h1>
-        <input type="file" onchange="fillBase64(this)" accept="image/png, image/jpeg">
-        <form autocomplete="off" method="POST">
-            <input type='text' name='caption' placeholder="your sustainability tip...">
-            <input hidden id="img-base64-txt" type="text" name="image">
-            <input hidden type="text" name="engagement" value="POST">
-            <button type="submit">post</button>
-        </form>
+    <!-- navbar -->
+    <div id="navbar">
+        <div id="user">
+            <div id="userlogo">{{ user.UserName[0] }}</div>
+            <div id="loggedinas">Logged in as <span>{{ user.UserName }}</span></div>
+            <div id="susscore">eco score<div>{{ user.Score }}</div>
+            </div>
+        </div>
+        <a id="logout" href="/logout">LOGOUT</a>
     </div>
 
-    <!-- posts -->
-    {% if posts %}
-    {% for post in posts %}
-    <div class='post-card'>
+    <div id="main">
 
-        <!-- main post -->
-        <h1>{{ post.UserName }} ({{ userpoints[loop.index0] }} points)</h1>
-        {% if post.ImageLink != "" %}
-        <img src="{{ post.ImageLink }}">
-        {% endif %}
-        <p>{{ post.Caption }}</p>
-        <p class='post-date'>{{ post.Date }}</p>
-        <p>sustainability score {{ post.Points }}</p>
-
-        <!-- comments on this post -->
-        <div id="comments">
-            {% for comment in comments[loop.index0] %}
-            <div class="comment">
-                <b>{{ comment[1] }}</b>
-                <p>{{ comment[2] }}</p>
-            </div>
-            {% endfor %}
+        <!-- new post form -->
+        <div id='postBox'>
+            <h1>new byte 🐊</h1>
+            <input type="file" onchange="fillBase64(this)" accept="image/png, image/jpeg">
+            <form autocomplete="off" method="POST">
+                <input type='text' name='caption' placeholder="your sustainability tip...">
+                <input hidden id="img-base64-txt" type="text" name="image">
+                <input hidden type="text" name="engagement" value="POST">
+                <button type="submit">post</button>
+            </form>
         </div>
 
-        <!-- like button -->
-        <form autocomplete="off" method="POST">
-            <input hidden type="text" name="postid" value="{{ post.PostID }}">
-            <input hidden type="text" name="engagement" value="LIKE">
+        <!-- posts -->
+        {% if posts %}
+        {% for post in posts %}
+        <div class='post-card'>
 
-            {% if likestatuss[loop.index0] == 1 %}
-            <button class="like-dislike-active" type="submit">Like</button>
-            {% else %}
-            <button class="like-dislike-unactive" type="submit">Like</button>
+            <!-- main post -->
+            <div class="title">
+                <div class="poster">{{ post.UserName }}</div>
+                <div class="score">
+                    <div class="label">eco score {{ userpoints[loop.index0] }}</div>
+                    <!-- <div class="value">{{ userpoints[loop.index0] }}</div> -->
+                </div>
+            </div>
+
+            {% if post.ImageLink != "" %}
+            <div class="image-wrapper">
+                <img src="{{ post.ImageLink }}">
+            </div>
             {% endif %}
-        </form>
 
-        <!-- dislike button -->
-        <form autocomplete="off" method="POST">
-            <input hidden type="text" name="postid" value="{{ post.PostID }}">
-            <input hidden type="text" name="engagement" value="DISLIKE">
+            <div class="caption">{{ post.Caption }}</div>
 
-            {% if likestatuss[loop.index0] == -1 %}
-            <button class="like-dislike-active" type="submit">Dislike</button>
-            {% else %}
-            <button class="like-dislike-unactive" type="submit">Dislike</button>
-            {% endif %}
-        </form>
+            <div class="post-details">
 
-        <!-- comment form -->
-        <form autocomplete="off" method="POST">
-            <input type="text" name="comment">
-            <input hidden type="text" name="postid" value="{{ post.PostID }}">
-            <input hidden type="text" name="engagement" value="COMMENT">
-            <button type="submit">Comment</button>
-        </form>
+                <div class='post-date'>{{ post.Date }}</div>
+                <div class="post-score">sustainability score {{ post.Points }}</div>
 
+                <!-- like button -->
+                <form autocomplete="off" method="POST">
+                    <input hidden type="text" name="postid" value="{{ post.PostID }}">
+                    <input hidden type="text" name="engagement" value="LIKE">
+
+                    {% if likestatuss[loop.index0] == 1 %}
+                    <button class="like-dislike-active like" type="submit">👍 Like</button>
+                    {% else %}
+                    <button class="like-dislike-unactive like" type="submit">👍 Like</button>
+                    {% endif %}
+                </form>
+
+                <!-- dislike button -->
+                <form autocomplete="off" method="POST">
+                    <input hidden type="text" name="postid" value="{{ post.PostID }}">
+                    <input hidden type="text" name="engagement" value="DISLIKE">
+
+                    {% if likestatuss[loop.index0] == -1 %}
+                    <button class="like-dislike-active dislike" type="submit">👎 Dislike</button>
+                    {% else %}
+                    <button class="like-dislike-unactive dislike" type="submit">👎 Dislike</button>
+                    {% endif %}
+                </form>
+
+            </div>
+
+            <!-- comments on this post -->
+            <div class="comments">
+                {% if comments[loop.index0]|length != 0 %}
+                {% for comment in comments[loop.index0] %}
+                <div class="comment"><b>{{ comment[1] }}</b> {{ comment[2] }}</div>
+                {% endfor %}
+                {% else %}
+                <div class="comment" style="color: var(--mid-text)">no comments yet</div>
+                {% endif %}
+            </div>
+
+            <!-- comment form -->
+            <form class="comment-form" autocomplete="off" method="POST">
+                <input class="textbox" type="text" name="comment" placeholder="join the discussion..."><input hidden type="text" name="postid" value="{{ post.PostID }}">
+                <input hidden type="text" name="engagement" value="COMMENT"><button type="submit">Comment</button>
+            </form>
+
+        </div>
+        {% endfor %}
+        {% endif %}
     </div>
-    {% endfor %}
-    {% endif %}
 
 </body>
 
