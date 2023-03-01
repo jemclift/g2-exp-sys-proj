@@ -69,7 +69,8 @@ def main():
 
         elif request.form["engagement"] == 'COMMENT':
             postid, comment = request.form['postid'], request.form['comment']
-            addComment(user.UserID, user.UserName, postid, comment)
+            if comment:
+                addComment(user.UserID, user.UserName, postid, comment)
 
         elif request.form["engagement"] == 'POST':
             caption, image = request.form['caption'], request.form['image']
