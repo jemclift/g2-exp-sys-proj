@@ -78,7 +78,6 @@ body {
 /* main */
 
 #main {
-    /* background-color: lightskyblue; */
     margin: auto;
     width: min(95vw, 50rem);
     box-sizing: border-box;
@@ -88,8 +87,90 @@ body {
 /* postbox */
 
 #postBox {
-    background-color: cadetblue;
     margin-bottom: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 0 1px var(--new-post-border);
+    background-color: var(--new-post-background);
+}
+
+#postBox #title {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--new-post-border);
+}
+
+#postBox #title div {
+    line-height: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding-left: 0.5rem;
+    color: var(--new-post-text);
+}
+
+#postBox input[type="file"] {
+    outline: none;
+    border: none;
+    width: 100%;
+    border-bottom: 1px solid var(--new-post-border);
+    box-sizing: border-box;
+    line-height: 1rem;
+    color: var(--new-post-text);
+    font-size: 1rem;
+}
+
+#postBox input[type=file]::file-selector-button {
+    outline: none;
+    border: none;
+    border-right: 1px solid var(--new-post-border);
+    padding: 1rem;
+    background-color: var(--new-post-background);
+    color: var(--new-post-text);
+    margin-right: 1rem;
+    width: 8rem;
+}
+
+.post-form {
+    width: 100%;
+    /* padding-top: 0; */
+    border-radius: 0 0 1rem 1rem;
+    display: flex;
+}
+
+.post-form .textbox {
+    width: calc(100% - 8rem);
+    outline: none;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 0 0 0 1rem;
+    padding: 1rem;
+    color: var(--new-post-text);
+    font-size: 1rem;
+    box-shadow: 0 0 0 1px var(--new-post-border);
+    z-index: 10;
+    background-color: var(--new-post-background);
+}
+
+.post-form .textbox::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: var(--new-post-text);
+    opacity: 1;
+    /* Firefox */
+}
+
+.post-form .textbox:focus {
+    box-shadow: 0 0 0 1px var(--new-post-text);
+}
+
+.post-form button {
+    width: 8rem;
+    outline: none;
+    border: none;
+    padding: 1rem;
+    box-sizing: border-box;
+    background-color: var(--new-post-background);
+    color: var(--new-post-text);
+    border-radius: 0 0 1rem 0;
+    z-index: 1;
+    font-size: 1rem;
 }
 
 /* posts */
@@ -126,6 +207,18 @@ body {
     color: var(--mid-text);
     margin-left: 0.5rem;
     margin-right: 0.5rem;
+}
+
+.title .verified-badge {
+    color: var(--verified-badge-primary);
+    background-color: var(--verified-badge-secondry);
+    /* width: 2rem; */
+    /* height: 2rem; */
+    border-radius: 1rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    line-height: 1rem;
+    text-align: center;
+    box-shadow: 0 0 0 1px var(--verified-badge-primary);
 }
 
 .image-wrapper {
@@ -215,7 +308,6 @@ form {
 
 .comment-form {
     width: 100%;
-    background-color: rgba(255, 0, 0, 0.12);
     padding-top: 0;
     border-radius: 0 0 1rem 1rem;
     display: flex;
@@ -256,8 +348,4 @@ form {
     border-radius: 0 0 1rem 0;
     z-index: 1;
     font-size: 1rem;
-}
-
-.comment-form button:hover {
-    display: none;
 }

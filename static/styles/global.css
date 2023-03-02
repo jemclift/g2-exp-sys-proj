@@ -2,11 +2,21 @@
     --primary-blue: #2e3b84;
     --primary-green: #486b3a;
     --background-green: #509a7b;
+
     --light-text: white;
     --mid-text: rgb(101, 117, 89);
     --dark-text: rgb(23, 61, 0);
+
     --post-background: white;
-    --post-border: rgb(195, 195, 195);
+    /* --post-border: rgb(195, 195, 195); */
+    --post-border: rgb(215, 215, 215);
+
+    --new-post-border: #aab2e8;
+    --new-post-background: rgb(189, 223, 235);
+    --new-post-text: #2e3b84;
+
+    --verified-badge-primary: hotpink;
+    --verified-badge-secondry: pink;
 }
 
 body {

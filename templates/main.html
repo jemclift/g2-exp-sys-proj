@@ -38,14 +38,18 @@
 
         <!-- new post form -->
         <div id='postBox'>
-            <h1>new byte 🐊</h1>
+
+            <div id="title"><div>new byte 🐊</div></div>
+
             <input type="file" onchange="fillBase64(this)" accept="image/png, image/jpeg">
-            <form autocomplete="off" method="POST">
-                <input type='text' name='caption' placeholder="your sustainability tip...">
+
+            <form class="post-form" autocomplete="off" method="POST">
+                <input class='textbox' type='text' name='caption' placeholder="your sustainability tip...">
                 <input hidden id="img-base64-txt" type="text" name="image">
                 <input hidden type="text" name="engagement" value="POST">
                 <button type="submit">post</button>
             </form>
+
         </div>
 
         <!-- posts -->
@@ -58,8 +62,10 @@
                 <div class="poster">{{ post.UserName }}</div>
                 <div class="score">
                     <div class="label">eco score {{ userpoints[loop.index0] }}</div>
-                    <!-- <div class="value">{{ userpoints[loop.index0] }}</div> -->
                 </div>
+                {% if post.Verified == 1 %}
+                <div class="verified-badge">verified ✔</div>
+                {% endif %}
             </div>
 
             {% if post.ImageLink != "" %}
@@ -115,7 +121,7 @@
             <!-- comment form -->
             <form class="comment-form" autocomplete="off" method="POST">
                 <input class="textbox" type="text" name="comment" placeholder="join the discussion..."><input hidden type="text" name="postid" value="{{ post.PostID }}">
-                <input hidden type="text" name="engagement" value="COMMENT"><button type="submit">Comment</button>
+                <input hidden type="text" name="engagement" value="COMMENT"><button type="submit">comment</button>
             </form>
 
         </div>

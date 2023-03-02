@@ -76,7 +76,7 @@ function mobileCheck() {
             post_date.innerHTML = post_date.innerHTML.slice(7, -4)
         }
         for (post_score of post_scores) {
-            post_score.innerHTML = "s. scr "+post_score.innerHTML.slice(20)
+            post_score.innerHTML = "🌻 "+post_score.innerHTML.slice(20)
         }
 
         isMobile.value = 1
@@ -99,7 +99,7 @@ function mobileCheck() {
             post_date.innerHTML = "posted "+post_date.innerHTML+" ago"
         }
         for (post_score of post_scores) {
-            post_score.innerHTML = "sustainability score "+post_score.innerHTML.slice(7)
+            post_score.innerHTML = "sustainability score "+post_score.innerHTML.slice(2)
         }
 
         isMobile.value = 0
