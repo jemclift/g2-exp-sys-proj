@@ -76,7 +76,7 @@ def main():
             caption, image = request.form['caption'], request.form['image']
             addPost(user.UserID, user.UserName, caption, image)
 
-    # get recent posts to display
+    # get display information
     posts = getMostRecentPosts()
     comments = getCommentListFromPosts(posts)
     likestatuss = getLikeStatussFromPosts(posts, user.UserID)

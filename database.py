@@ -126,10 +126,11 @@ def deletePost(postid):
 
 def toggleLikePost(userid, postid):
 
-    # find the poster
-    user = User.query.filter_by(UserID=userid).first()
-    
     post = Post.query.filter_by(PostID=postid).first()
+
+    # find the poster
+    user = User.query.filter_by(UserID=post.UserID).first()
+    
     LDCobj = pickle.loads(post.LDCBlob)
     user.Score += LDCobj.toggleLike(userid)
     post.Points = len(LDCobj.likes) - len(LDCobj.dislikes)
@@ -139,10 +140,12 @@ def toggleLikePost(userid, postid):
     db.session.commit()
 
 def toggleDislikePost(userid, postid):
-    # find the poster
-    user = User.query.filter_by(UserID=userid).first()
-    
+
     post = Post.query.filter_by(PostID=postid).first()
+
+    # find the poster
+    user = User.query.filter_by(UserID=post.UserID).first()
+    
     LDCobj = pickle.loads(post.LDCBlob)
     user.Score += LDCobj.toggleDislike(userid)
     post.Points = len(LDCobj.likes) - len(LDCobj.dislikes)
