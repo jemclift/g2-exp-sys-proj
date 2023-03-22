@@ -2,10 +2,12 @@
 
 import flask_unittest
 import os
+import pickle
 
 from flask import Flask
 from creds import *
 from database import *
+
 
 class TestingFlask(flask_unittest.AppTestCase):
 
@@ -64,5 +66,100 @@ class TestingFlask(flask_unittest.AppTestCase):
 
             self.assertEqual(user, None)
 
-# if __name__ == '__main__':
-    # flask_unittest.main.unittest.main()
+    def test_add_post(self, app):
+
+        with app.app_context():
+            UserID = 3637
+            UserName = "test_username"
+            Caption = "test caption"
+
+            addPost(UserID, UserName, Caption)
+            post = Post.query.filter_by(UserName=UserName).first()
+
+            self.assertEqual(post.UserID, UserID)
+            self.assertEqual(post.UserName, UserName)
+            self.assertEqual(post.Caption, Caption)
+
+    def test_delete_post(self, app):
+
+        with app.app_context():
+            UserID = 38736487
+            UserName = "test_username"
+            Caption = "test caption"
+
+            addPost(UserID, UserName, Caption)
+            post = Post.query.filter_by(UserName=UserName).first()
+            
+            testPostID = post.PostID
+            
+            deletePost(testPostID)
+            post = Post.query.filter_by(UserName=UserName).first()
+
+            self.assertEqual(post, None)
+
+    def test_toggle_like_post(self, app):
+
+        with app.app_context():
+            
+            UserID = "87346587"
+            UserName = "test_username"
+            Caption = "test caption"
+            PwdHash = "some hash"
+
+            insertUser(UserName, PwdHash)
+            user = User.query.filter_by(UserName=UserName).first()
+
+            addPost(user.UserID, user.UserName, Caption)
+            post = Post.query.filter_by(UserName=UserName).first()
+
+            toggleLikePost(UserID, post.PostID)
+
+            self.assertEqual(post.Points, 1)
+            self.assertEqual(user.Score, 1)
+
+    def test_toggle_dislike_post(self, app):
+
+        with app.app_context():
+            
+            UserID = "87346587"
+            UserName = "test_username"
+            Caption = "test caption"
+            PwdHash = "some hash"
+
+            insertUser(UserName, PwdHash)
+            user = User.query.filter_by(UserName=UserName).first()
+
+            addPost(user.UserID, user.UserName, Caption)
+            post = Post.query.filter_by(UserName=UserName).first()
+
+            toggleDislikePost(UserID, post.PostID)
+
+            self.assertEqual(post.Points, -1)
+            self.assertEqual(user.Score, -1)
+
+    def test_add_Comment(self, app):
+
+        with app.app_context():
+            
+            UserName = "test_username"
+            Caption = "test caption"
+            PwdHash = "some hash"
+            Comment = "test comment"
+
+            insertUser(UserName, PwdHash)
+            user = User.query.filter_by(UserName=UserName).first()
+
+            addPost(user.UserID, user.UserName, Caption)
+            post = Post.query.filter_by(UserName=UserName).first()
+
+            addComment(user.UserID, user.UserName, post.PostID, Comment)
+
+            LDCobj = pickle.loads(post.LDCBlob)
+
+            self.assertTrue((user.UserID, UserName, Comment) in LDCobj.comments)
+
+
+
+
+
+
