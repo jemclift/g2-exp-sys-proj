@@ -119,7 +119,7 @@ def deletePost(postid):
     post = Post.query.filter_by(PostID=postid).first()
 
     if post is not None:
-        post.delete()
+        db.session.delete(post)
         db.session.commit()
 
 # post interactions
