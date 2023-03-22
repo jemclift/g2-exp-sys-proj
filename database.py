@@ -239,5 +239,5 @@ def deleteUser(UserName):
 
     # delete it if it exists
     if user is not None:
-        user.delete()
+        db.session.delete(user)
         db.session.commit()
