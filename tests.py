@@ -1,3 +1,5 @@
+# python -m unittest -v tests.py
+
 import flask_unittest
 import os
 
@@ -62,5 +64,5 @@ class TestingFlask(flask_unittest.AppTestCase):
 
             self.assertEqual(user, None)
 
-if __name__ == '__main__':
-    flask_unittest.main.unittest.main()
+# if __name__ == '__main__':
+    # flask_unittest.main.unittest.main()
