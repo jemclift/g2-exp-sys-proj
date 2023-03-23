@@ -215,3 +215,27 @@ class TestingFlask(flask_unittest.AppTestCase):
             post1 = posts[1]
 
             self.assertTrue(post.Date > post1.Date)
+
+    def test_getLikeStatusFromPosts(self, app):
+
+        with app.app_context():
+
+            UserName = "test_username"
+            PwdHash = "some hash"
+            Caption = "test caption"
+            
+            insertUser(UserName, PwdHash)
+            user = User.query.filter_by(UserName=UserName).first()
+
+
+            addPost (user.UserID, UserName, Caption)
+            post = Post.query.order_by(desc(Post.Date)).limit(100).all()
+
+            toggleLikePost(user.UserID, post[0].PostID)
+
+            like_status = getLikeStatussFromPosts (post, user.UserID)
+
+            self.assertEqual(sum(like_status), 1)
+
+
+
