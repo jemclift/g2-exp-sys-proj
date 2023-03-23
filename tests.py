@@ -157,3 +157,24 @@ class TestingFlask(flask_unittest.AppTestCase):
             LDCobj = pickle.loads(post.LDCBlob)
 
             self.assertTrue((user.UserID, UserName, Comment) in LDCobj.comments)
+
+    def test_getUserPointsFromPosts (self, app):
+
+        with app.app_context():
+            
+            UserName =  "test_username"
+            PwdHash = "some hash"
+            Caption = "test caption"
+
+            insertUser(UserName, PwdHash)  
+            user = User.query.filter_by(UserName=UserName).first()
+
+            addPost (user.UserID, UserName, Caption) 
+            post = Post.query.filter_by(UserID = user.UserID).first()
+            
+            toggleLikePost (user.UserID, post.PostID)
+            post = Post.query.order_by(desc(Post.Date)).limit(100).all()
+
+            test_posts = getUserPointsFromPosts(post)
+            
+            self.assertEqual(test_posts[0], 1)
