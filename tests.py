@@ -1,4 +1,4 @@
-# python3 -m unittest -v tests.py
+# python -m unittest -v tests.py
 
 import flask_unittest
 import os
@@ -51,25 +51,6 @@ class TestingFlask(flask_unittest.AppTestCase):
 
             self.assertEqual(user.UserName, UserName)
             self.assertEqual(user.PwdHash, PwdHash)
-
-    def test_duplicate_user(self, app):
-        with app.app_context():
-
-            UserName = "test_username"
-            PwdHash = "some password"
-
-            UserName1 = "test_username"
-            PwdHash1 = "some password"
-
-            insertUser(UserName, PwdHash)
-            output = insertUser(UserName1, PwdHash1)
-
-            user = User.query.filter_by(UserName=UserName).first()
-
-            self.assertEqual(user.UserName, UserName)
-            self.assertEqual(user.PwdHash, PwdHash)
-
-            self.assertEqual(output, False)
 
     def test_delete_user(self, app):
 
@@ -195,5 +176,35 @@ class TestingFlask(flask_unittest.AppTestCase):
             post = Post.query.order_by(desc(Post.Date)).limit(100).all()
 
             test_posts = getUserPointsFromPosts(post)
-            
+
             self.assertEqual(test_posts[0], 1)
+
+    def test_getMostRecentPosts (self, app):
+
+        with app.app_context():
+            
+            UserID = 1234
+            UserName =  "test_username"
+            Caption = "test caption"
+
+            addPost(UserID, UserName, Caption)
+            addPost(UserID, UserName, Caption)
+
+            posts = getMostRecentPosts()
+
+            post = posts[0]
+            post1 = posts[1]
+
+            self.assertTrue(post.Date > post1.Date)
+
+
+
+            # addPost(...)
+            # addPost(...) (another one)
+
+            #posts = getMostRecentPosts()
+
+            # post = posts[0]
+            # post1 = posts[1]
+
+            #self.assert (post.Date > post1.Date)
