@@ -1,4 +1,4 @@
-# python -m unittest -v tests.py
+# python3 -m unittest -v tests.py
 
 import flask_unittest
 import os
@@ -51,6 +51,25 @@ class TestingFlask(flask_unittest.AppTestCase):
 
             self.assertEqual(user.UserName, UserName)
             self.assertEqual(user.PwdHash, PwdHash)
+
+    def test_duplicate_user(self, app):
+        with app.app_context():
+
+            UserName = "test_username"
+            PwdHash = "some password"
+
+            UserName1 = "test_username"
+            PwdHash1 = "some password"
+
+            insertUser(UserName, PwdHash)
+            output = insertUser(UserName1, PwdHash1)
+
+            user = User.query.filter_by(UserName=UserName).first()
+
+            self.assertEqual(user.UserName, UserName)
+            self.assertEqual(user.PwdHash, PwdHash)
+
+            self.assertEqual(output, False)
 
     def test_delete_user(self, app):
 
