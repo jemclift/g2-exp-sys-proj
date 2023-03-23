@@ -238,4 +238,35 @@ class TestingFlask(flask_unittest.AppTestCase):
             self.assertEqual(sum(like_status), 1)
 
 
+    def test_getCommentListFromPosts(self, app):
+
+        with app.app_context():
+            UserName = "test_username"
+            PwdHash = "some hash"
+            Caption = "test caption"
+            Comment = "test comment"
+
+            insertUser(UserName, PwdHash)
+            user = User.query.filter_by(UserName=UserName).first()
+
+            addPost (user.UserID, UserName, Caption)
+            post = Post.query.order_by(desc(Post.Date)).limit(100).all()
+
+            addComment(user.UserID, UserName, post[0].PostID, Comment)
+
+            comment_status = getCommentListFromPosts(post)
+            
+            LDCobj = pickle.loads(post[0].LDCBlob)
+
+            self.assertEqual(comment_status[0], LDCobj.comments)
+
+
+
+    
+
+
+
+
+
+
 
