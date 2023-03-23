@@ -157,9 +157,3 @@ class TestingFlask(flask_unittest.AppTestCase):
             LDCobj = pickle.loads(post.LDCBlob)
 
             self.assertTrue((user.UserID, UserName, Comment) in LDCobj.comments)
-
-
-
-
-
-
