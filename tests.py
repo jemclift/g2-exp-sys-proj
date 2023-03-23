@@ -54,6 +54,25 @@ class TestingFlask(flask_unittest.AppTestCase):
             self.assertEqual(user.UserName, UserName)
             self.assertEqual(user.PwdHash, PwdHash)
 
+    def test_duplicateUserError(self, app):
+
+        with app.app_context():
+            UserName = "test_username"
+            PwdHash = "some hash"
+
+            UserName1 = "test_username"
+            PwdHash1 = "some hash"
+
+            insertUser(UserName, PwdHash)
+            output = insertUser(UserName1, PwdHash1)
+
+            user = User.query.filter_by(UserName=UserName).first()
+
+            self.assertEqual(user.UserName, UserName)
+            self.assertEqual(user.PwdHash, PwdHash)
+
+            self.assertEqual(output, False)
+
     def test_delete_user(self, app):
 
         with app.app_context():
@@ -159,6 +178,88 @@ class TestingFlask(flask_unittest.AppTestCase):
             LDCobj = pickle.loads(post.LDCBlob)
 
             self.assertTrue((user.UserID, UserName, Comment) in LDCobj.comments)
+
+    def test_get_user_points_from_posts (self, app):
+
+        with app.app_context():
+            
+            UserName = "test_username"
+            PwdHash = "some hash"
+            Caption = "test caption"
+
+            insertUser(UserName, PwdHash)  
+            user = User.query.filter_by(UserName=UserName).first()
+
+            addPost (user.UserID, UserName, Caption) 
+            post = Post.query.filter_by(UserID = user.UserID).first()
+            
+            toggleLikePost (user.UserID, post.PostID)
+            post = Post.query.order_by(desc(Post.Date)).limit(100).all()
+
+            test_posts = getUserPointsFromPosts(post)
+
+            self.assertEqual(test_posts[0], 1)
+
+    def test_get_most_recent_posts(self, app):
+
+        with app.app_context():
+            
+            UserID = 1234
+            UserName = "test_username"
+            Caption = "test caption"
+
+            addPost(UserID, UserName, Caption)
+            addPost(UserID, UserName, Caption)
+
+            posts = getMostRecentPosts()
+
+            post = posts[0]
+            post1 = posts[1]
+
+            self.assertTrue(post.Date > post1.Date)
+
+    def test_get_like_status_from_posts(self, app):
+
+        with app.app_context():
+
+            UserName = "test_username"
+            PwdHash = "some hash"
+            Caption = "test caption"
+            
+            insertUser(UserName, PwdHash)
+            user = User.query.filter_by(UserName=UserName).first()
+
+
+            addPost (user.UserID, UserName, Caption)
+            post = Post.query.order_by(desc(Post.Date)).limit(100).all()
+
+            toggleLikePost(user.UserID, post[0].PostID)
+
+            like_status = getLikeStatussFromPosts (post, user.UserID)
+
+            self.assertEqual(sum(like_status), 1)
+
+    def test_get_comment_list_from_posts(self, app):
+
+        with app.app_context():
+            UserName = "test_username"
+            PwdHash = "some hash"
+            Caption = "test caption"
+            Comment = "test comment"
+
+            insertUser(UserName, PwdHash)
+            user = User.query.filter_by(UserName=UserName).first()
+
+            addPost (user.UserID, UserName, Caption)
+            post = Post.query.order_by(desc(Post.Date)).limit(100).all()
+
+            addComment(user.UserID, UserName, post[0].PostID, Comment)
+
+            comment_status = getCommentListFromPosts(post)
+            
+            LDCobj = pickle.loads(post[0].LDCBlob)
+
+            self.assertEqual(comment_status[0], LDCobj.comments)
 
     ### cookie tests
 
