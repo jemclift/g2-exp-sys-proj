@@ -54,7 +54,7 @@ class TestingFlask(flask_unittest.AppTestCase):
             self.assertEqual(user.UserName, UserName)
             self.assertEqual(user.PwdHash, PwdHash)
 
-    def test_duplicateUserError(self, app):
+    def test_duplicate_user_error(self, app):
 
         with app.app_context():
             UserName = "test_username"
@@ -71,7 +71,7 @@ class TestingFlask(flask_unittest.AppTestCase):
             self.assertEqual(user.UserName, UserName)
             self.assertEqual(user.PwdHash, PwdHash)
 
-            self.assertEqual(output, False)
+            self.assertFalse(output)
 
     def test_delete_user(self, app):
 
@@ -85,11 +85,12 @@ class TestingFlask(flask_unittest.AppTestCase):
 
             user = User.query.filter_by(UserName=UserName).first()
 
-            self.assertEqual(user, None)
+            self.assertIsNone(user)
 
     def test_add_post(self, app):
 
         with app.app_context():
+
             UserID = 3637
             UserName = "test_username"
             Caption = "test caption"
@@ -116,7 +117,7 @@ class TestingFlask(flask_unittest.AppTestCase):
             deletePost(testPostID)
             post = Post.query.filter_by(UserName=UserName).first()
 
-            self.assertEqual(post, None)
+            self.assertIsNone(post)
 
     def test_toggle_like_post(self, app):
 
