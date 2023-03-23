@@ -52,6 +52,25 @@ class TestingFlask(flask_unittest.AppTestCase):
             self.assertEqual(user.UserName, UserName)
             self.assertEqual(user.PwdHash, PwdHash)
 
+    def test_duplicateUserError(self, app):
+
+        with app.app_context():
+            UserName = "test_username"
+            PwdHash = "some hash"
+
+            UserName1 = "test_username"
+            PwdHash1 = "some hash"
+
+            insertUser(UserName, PwdHash)
+            output = insertUser(UserName1, PwdHash1)
+
+            user = User.query.filter_by(UserName=UserName).first()
+
+            self.assertEqual(user.UserName, UserName)
+            self.assertEqual(user.PwdHash, PwdHash)
+
+            self.assertEqual(output, False)
+
     def test_delete_user(self, app):
 
         with app.app_context():
@@ -196,15 +215,3 @@ class TestingFlask(flask_unittest.AppTestCase):
             post1 = posts[1]
 
             self.assertTrue(post.Date > post1.Date)
-
-
-
-            # addPost(...)
-            # addPost(...) (another one)
-
-            #posts = getMostRecentPosts()
-
-            # post = posts[0]
-            # post1 = posts[1]
-
-            #self.assert (post.Date > post1.Date)
