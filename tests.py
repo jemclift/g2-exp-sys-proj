@@ -1,15 +1,15 @@
 # python -m unittest -v tests.py
 
-import flask_unittest
-import os
-import pickle
+import unittest, flask_unittest, os, pickle
 
 from flask import Flask
 from creds import *
 from database import *
-
+from cookie import *
 
 class TestingFlask(flask_unittest.AppTestCase):
+
+    ### test app
 
     def create_app(self):
 
@@ -37,6 +37,8 @@ class TestingFlask(flask_unittest.AppTestCase):
         # routes
         from views import core
         app.register_blueprint(core)
+
+    ### database tests
 
     def test_create_user(self, app):
 
@@ -137,7 +139,7 @@ class TestingFlask(flask_unittest.AppTestCase):
             self.assertEqual(post.Points, -1)
             self.assertEqual(user.Score, -1)
 
-    def test_add_Comment(self, app):
+    def test_add_comment(self, app):
 
         with app.app_context():
             
@@ -158,8 +160,71 @@ class TestingFlask(flask_unittest.AppTestCase):
 
             self.assertTrue((user.UserID, UserName, Comment) in LDCobj.comments)
 
+    ### cookie tests
+
+    def test_make_cookie(self, app):
+
+        with app.app_context():
+
+            UserName = "test_username"
+            PwdHash = "some hash"
+
+            insertUser(UserName, PwdHash)
+            user = User.query.filter_by(UserName=UserName).first()
+
+            # first make a system cookie
+            system_cookie = makeCookie(user, db)
+
+            # now reproduce what it should be
+            test_cookie = str(user.UserID) + ':' + user.AuthToken
+            mac = hmac.new(COOKIE_SECRET_KEY, test_cookie.encode(), sha256).hexdigest()
+            test_cookie = str(user.UserID) + ':' + mac
+
+            self.assertEqual(system_cookie, test_cookie)
+
+    def test_check_for_cookie(self, app):
+
+        with app.app_context():
+
+            username = "test_username"
+            passhash = "some hash"
+
+            insertUser(username, passhash)
+
+            user = User.query.filter_by(UserName=username).first()
+
+            # mock request object
+            class Request():
+                def __init__(self, cookie):
+                    self.cookies = { 'rememberme' : cookie }
+
+            usercookie = makeCookie(user, db)
+            userrequest = Request(usercookie)
+
+            self.assertTrue(checkForCookie(userrequest, db, User))
+    
+    def test_get_user_from_cookie(self, app):
+
+        with app.app_context():
+
+            UserName = "test_username"
+            PwdHash = "some hash"
+
+            insertUser(UserName, PwdHash)
+            user = User.query.filter_by(UserName=UserName).first()
+
+            # mock request object
+            class Request():
+                def __init__(self, cookie):
+                    self.cookies = { 'rememberme' : cookie }
+
+            cookie = makeCookie(user, db)
+            request = Request(cookie)
+
+            cookie_user = getUserFromCookie(request, db, User)
+
+            self.assertEqual(user, cookie_user)
 
 
-
-
-
+if __name__ == '__main__':
+    unittest.main()
