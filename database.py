@@ -223,7 +223,7 @@ def insertUser(UserName, PwdHash):
 
     # return false if the username already exists
     user = User.query.filter_by(UserName=UserName).first()
-    if user is not None: return false
+    if user is not None: return False
 
     # add the new user
     new = User(UserName=UserName, PwdHash=PwdHash, Score=0)
