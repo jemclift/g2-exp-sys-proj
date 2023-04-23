@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from datetime import datetime
 import pickle
+from creds import *
 
 db = SQLAlchemy()
 
@@ -216,6 +217,23 @@ def getMostRecentPosts(n=100):
 
     posts = Post.query.order_by(desc(Post.Date)).limit(n).all()
     return posts
+
+# get n highest ranked posts
+
+def getHighestRankedPosts(n=100):
+
+    def calculatePostRanking(post):
+
+        rank = post.Points
+
+        if post.Verified:
+            rank += VERIFIED_POST_RANKING_BOOST
+
+        return rank
+
+    posts = getMostRecentPosts(n)
+
+    return sorted(posts, key=calculatePostRanking, reverse=True)
 
 # insert a user with the given name and password hash. 
 

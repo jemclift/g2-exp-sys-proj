@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, make_r
 from passlib.hash import argon2
 from database import *
 from cookie import *
+from creds import *
 
 core = Blueprint('core', __name__, template_folder='templates')
 
@@ -77,7 +78,7 @@ def main():
             addPost(user.UserID, user.UserName, caption, image)
 
     # get display information
-    posts = getMostRecentPosts()
+    posts = (getHighestRankedPosts if EVALUATION_MODE else getMostRecentPosts)()
     comments = getCommentListFromPosts(posts)
     likestatuss = getLikeStatussFromPosts(posts, user.UserID)
     userpoints = getUserPointsFromPosts(posts)
