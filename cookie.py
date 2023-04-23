@@ -53,3 +53,13 @@ def getUserFromCookie(request, db, User):
         user_id = remember_cookie.split(":")[0]
 
         return User.query.filter_by(UserID=user_id).first()
+
+# D4 Evaluation
+
+def userInteraction(request, db, User):
+
+    if checkForCookie(request, db, User):
+        user = getUserFromCookie(request, db, User)
+        user.Interactions += 1
+        print(f"USER {user.UserName} incremented to {user.Interactions}")
+        db.session.commit()

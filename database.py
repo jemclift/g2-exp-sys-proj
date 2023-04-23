@@ -18,6 +18,9 @@ class User(db.Model):
     AuthToken = db.Column(db.String(64))
     Score = db.Column(db.Integer)
 
+    # D4 Evaluation
+    Interactions = db.Column(db.Integer)
+
 class Post(db.Model):
 
     __tablename__ = 'Post'
@@ -244,7 +247,7 @@ def insertUser(UserName, PwdHash):
     if user is not None: return False
 
     # add the new user
-    new = User(UserName=UserName, PwdHash=PwdHash, Score=0)
+    new = User(UserName=UserName, PwdHash=PwdHash, Score=0, Interactions=0)
     db.session.add(new)
     db.session.commit()
 

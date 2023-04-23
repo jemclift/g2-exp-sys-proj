@@ -9,16 +9,28 @@ core = Blueprint('core', __name__, template_folder='templates')
 @core.route("/")
 
 def index():
+
+    # D4 Evaluation
+    userInteraction(request, db, User)
+
     return render_template('index.html')
 
 @core.route("/about")
 
 def about():
+    
+    # D4 Evaluation
+    userInteraction(request, db, User)
+
     return render_template('about.html')
 
 @core.route("/login", methods=['GET', 'POST'])
 
 def login():
+
+    # D4 Evaluation
+    userInteraction(request, db, User)
+
     if request.method == 'POST':
         # load form data
         username, password = request.form['username'], request.form['password']
@@ -51,6 +63,10 @@ def login():
 @core.route('/main', methods=['GET','POST'])
 
 def main():
+
+    # D4 Evaluation
+    userInteraction(request, db, User)
+
     # user isn't authorised
     if not checkForCookie(request, db, User):
         return redirect(url_for('core.login'))
@@ -96,6 +112,10 @@ def main():
 @core.route('/logout')
 
 def logout():
+
+    # D4 Evaluation
+    userInteraction(request, db, User)
+
     resp = make_response(redirect(url_for('core.index')))
 
     if 'rememberme' in request.cookies:
@@ -118,6 +138,10 @@ def logout():
 @core.route('/signup', methods=['GET', 'POST'])
 
 def signup():
+
+    # D4 Evaluation
+    userInteraction(request, db, User)
+
     if request.method == 'POST':
         form = request.form
         errors = []
